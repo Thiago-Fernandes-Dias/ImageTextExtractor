@@ -68,6 +68,7 @@ executable ImageTextExtractor
 
     -- Other library packages from which modules are imported.
     build-depends:     base >= 4.6 && < 5,
+                       process,
                        blaze-html,
                        bytestring,
                        filepath,
