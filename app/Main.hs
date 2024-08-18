@@ -7,7 +7,6 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text.Lazy as TL
 import Network.HTTP.Types (badRequest400, internalServerError500)
 import Network.Wai.Middleware.RequestLogger
-import Network.Wai.Middleware.Static
 import Network.Wai.Parse (defaultParseRequestBodyOptions, fileContent)
 import System.Environment
 import System.Exit (ExitCode (..))
