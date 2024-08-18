@@ -3,15 +3,12 @@
 
 module Main (main) where
 
-import Control.Exception (SomeException)
-import qualified Data.ByteString.Char8 as BS
-import qualified Data.ByteString.Lazy as B
-import Data.Foldable (for_)
 import qualified Data.Text.Lazy as TL
+import Network.HTTP.Types (badRequest400, internalServerError500)
 import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
-import Network.Wai.Parse (defaultParseRequestBodyOptions, fileContent, fileName)
-import System.FilePath ((</>))
+import Network.Wai.Parse (defaultParseRequestBodyOptions, fileContent)
+import System.Exit (ExitCode (..))
 import System.Process
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import qualified Text.Blaze.Html5 as H
@@ -32,34 +29,21 @@ main = scotty 3000 $ do
         H.html $ do
           H.body $ do
             H.form H.! method "post" H.! enctype "multipart/form-data" H.! action "/upload" $ do
-              H.input H.! type_ "file" H.! name "file_1"
-              H.br
-              H.input H.! type_ "file" H.! name "file_2"
-              H.br
+              H.input H.! type_ "file" H.! name "image"
               H.input H.! type_ "submit"
 
   post "/upload" $ do
     filesOpts defaultParseRequestBodyOptions $ \_ fs -> do
-      let fs' = [(fieldName, BS.unpack (fileName fi), fileContent fi) | (fieldName, fi) <- fs]
-      -- write the files to disk, so they can be served by the static middleware
-      for_ fs' $ \(_, fnam, fpath) -> do
-        liftIO
-          ( do
-              output <- readProcess "tesseract" [fpath, "stdout"] ""
-              putStrLn output
-              -- fc <- B.readFile fpath
-              -- B.writeFile ("./examples" </> "uploads" </> fnam) fc
-          )
-          `catch` ( \(e :: SomeException) -> do
-                      liftIO $ putStrLn $ unwords ["upload: something went wrong while saving temp files :", show e]
-                  )
-        -- generate list of links to the files just uploaded
-        html $
-          mconcat
-            [ mconcat
-                [ TL.fromStrict fName,
-                  ": ",
-                  renderHtml $ H.a (H.toHtml fn) H.! (href $ H.toValue fn) >> H.br
-                ]
-              | (fName, fn, _) <- fs'
-            ]
+      -- Assume we're processing only the first uploaded file for simplicity
+      case fs of
+        [] -> do
+          status badRequest400
+          text $ TL.pack "No file uploaded"
+        ((_, fi) : _) -> do
+          let fpath = fileContent fi
+          (exitCode, stdout, _) <- liftIO $ readProcessWithExitCode "tesseract" [fpath, "stdout"] ""
+          case exitCode of
+            ExitSuccess -> text $ TL.pack stdout
+            ExitFailure _ -> do
+              status internalServerError500
+              text $ TL.pack "An error occurred while processing the image."
