@@ -16,9 +16,6 @@ import qualified Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes
 import Web.Scotty
 
--- | NB : the file paths where files are saved and looked up are relative, so make sure
--- to run this program from the root directory of the 'scotty' repo, or adjust the paths
--- accordingly.
 main :: IO ()
 main = do
   maybeEnv <- lookupEnv "ENV"
