@@ -50,3 +50,10 @@ O Scotty, ao receber uma requisição HTTPS com o método POST e conteúdo do ti
 ### Surpresas
 
 Nós só conseguimos utilizar a biblioteca Scotty com o Cabal ao invés do Stack. No Stackage a versão disponível do Scotty é muito antiga, e não contém algumas funções que foram necessárias para o projeto. No Hackage a versão disponível é a mais rescente.
+
+## Dados da entrega
+
+- Integrantes:
+    - Thiago Fernandes Dias, RA 11202130847;
+    - William Fernanes Dias, RA 11202020043.
+- URL do vídeo: [https://youtu.be/XQOH9VlHU9k](https://youtu.be/XQOH9VlHU9k)
