@@ -3,25 +3,23 @@
 
 module Main (main) where
 
-import Data.Maybe (fromMaybe)
+import Config (loadConfig, _env, _port)
 import qualified Data.Text.Lazy as TL
 import Network.HTTP.Types (badRequest400, internalServerError500)
 import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
 import Network.Wai.Parse (defaultParseRequestBodyOptions, fileContent)
-import System.Environment
 import System.Exit (ExitCode (..))
-import System.Process hiding (env)
+import System.Process
 import Web.Scotty
 import Prelude hiding (id)
 
 main :: IO ()
 main = do
-  maybeEnv <- lookupEnv "ENV"
-  let env = fromMaybe "PROD" maybeEnv
+  config <- loadConfig
 
-  scotty 3000 $ do
-    middleware $ if env == "DEV" then logStdoutDev else logStdout
+  scotty (_port config) $ do
+    middleware $ if (_env config) == "DEV" then logStdoutDev else logStdout
     middleware $ staticPolicy (noDots >-> addBase "static")
 
     get "/" $ do
