@@ -27,6 +27,7 @@ EXPOSE ${port}
 
 # Set environment variables
 ENV ENV=PROD
+ENV PORT=${port}
 
 # Execute the program
 CMD ["haskeract"]

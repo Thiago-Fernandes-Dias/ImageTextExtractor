@@ -36,7 +36,6 @@ const service = new awsx.ecs.FargateService('service', {
 			portMappings: [
 				{
 					containerPort: 80,
-					hostPort: 80,
 					targetGroup: loadbalancer.defaultTargetGroup,
 				},
 			],
