@@ -15,9 +15,6 @@ import System.Process hiding (env)
 import Web.Scotty
 import Prelude hiding (id)
 
--- | NB : the file paths where files are saved and looked up are relative, so make sure
--- to run this program from the root directory of the 'scotty' repo, or adjust the paths
--- accordingly.
 main :: IO ()
 main = do
   maybeEnv <- lookupEnv "ENV"
