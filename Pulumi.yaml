@@ -1,0 +1,10 @@
+name: haskeract
+runtime:
+  name: nodejs
+  options:
+    packagemanager: pnpm
+description: A microservice that processes images built with Haskell.
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-typescript
