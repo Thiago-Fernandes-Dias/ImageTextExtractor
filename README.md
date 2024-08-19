@@ -46,3 +46,7 @@ O Scotty, ao receber uma requisição HTTPS com o método POST e conteúdo do ti
 
 - O projeto faz intenso uso de Monads para realização de operações sensíveis, como a leitura de arquivos e resultados de  processos;
 - Tratamento de erros quando nenhum arquivo é enviado ou caso ocorra algum problema na execução do programa tesseract.
+
+### Surpresas
+
+Nós só conseguimos utilizar a biblioteca Scotty com o Cabal ao invés do Stack. No Stackage a versão disponível do Scotty é muito antiga, e não contém algumas funções que foram necessárias para o projeto. No Hackage a versão disponível é a mais rescente.
