@@ -61,7 +61,11 @@ executable haskeract
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    other-modules:      Config,
+    other-modules:      Config, 
+                        Controllers,
+                        Controllers.Text,
+                        Services,
+                        Services.Tesseract,
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -80,6 +84,8 @@ executable haskeract
                        wai-middleware-static
 
     -- Directories containing source files.
-    hs-source-dirs:   src
+    hs-source-dirs:     src,
+                        src/Controllers,
+                        src/Services
 
     -- Base language which the package is written in.
