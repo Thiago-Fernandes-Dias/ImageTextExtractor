@@ -64,8 +64,13 @@ executable haskeract
     other-modules:      Config, 
                         Controllers,
                         Controllers.Text,
+                        Controllers.Remove,
                         Services,
                         Services.Tesseract,
+                        Services.Rembg,
+                        Utils.Files,
+                        Utils.Http
+
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -81,11 +86,15 @@ executable haskeract
                        text,
                        transformers,
                        wai-extra,
+                       http-conduit,
+                       temporary,
                        wai-middleware-static
 
     -- Directories containing source files.
     hs-source-dirs:     src,
                         src/Controllers,
-                        src/Services
+                        src/Services,
+                        src/Utils
+                        
 
     -- Base language which the package is written in.

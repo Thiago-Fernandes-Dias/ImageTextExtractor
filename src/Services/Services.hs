@@ -1,6 +1,6 @@
 module Services where
 
-data Result a = Ok a | Error String
+data Result a = Ok a | Error String deriving (Show)
 
 instance Functor Result where
   fmap f (Ok a) = Ok (f a)
