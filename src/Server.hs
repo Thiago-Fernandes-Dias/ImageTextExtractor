@@ -11,7 +11,11 @@ import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
 import Services.Rembg (removeBackground)
 import Services.Tesseract (extractText)
-import Web.Scotty
+import Web.Scotty (ScottyM, file, get, middleware, scotty)
+
+index :: ScottyM ()
+index = do
+  get "/" $ file "static/index.html"
 
 server :: ReaderT Config IO ()
 server = ReaderT $ \config -> do
@@ -19,5 +23,6 @@ server = ReaderT $ \config -> do
     middleware $ if _env config == "DEV" then logStdoutDev else logStdout
     middleware $ staticPolicy (noDots >-> addBase "static")
 
-    Text.controller extractText "/"
+    index
+    Text.controller extractText "/text"
     Remove.controller removeBackground "/remove"
