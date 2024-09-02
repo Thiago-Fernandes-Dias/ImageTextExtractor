@@ -65,6 +65,7 @@ executable haskeract
                         Controllers,
                         Controllers.Text,
                         Controllers.Remove,
+                        Server,
                         Services,
                         Services.Tesseract,
                         Services.Rembg,
@@ -88,7 +89,8 @@ executable haskeract
                        wai-extra,
                        http-conduit,
                        temporary,
-                       wai-middleware-static
+                       wai-middleware-static,
+                       mtl
 
     -- Directories containing source files.
     hs-source-dirs:     src,
