@@ -13,6 +13,7 @@ import Utils.Files (generateTempFilePath)
 import Utils.Http (downloadFile)
 import Web.Scotty (filesOpts, get, liftIO, post, queryParamMaybe, status, text)
 
+-- | Create a controller for removing the background from an image.
 controller :: (String -> String -> IO (Result ())) -> Controller
 controller remove prefix = do
   get (fromString prefix) $ do

@@ -15,6 +15,7 @@ image path format = do
   file path
   setHeader "Content-Type" $ fromString format
 
+-- | Send a server error response.
 serverError :: String -> ActionM ()
 serverError message = do
   status internalServerError500

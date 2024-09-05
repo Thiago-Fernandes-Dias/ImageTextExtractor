@@ -13,6 +13,7 @@ import Utils.Files (generateTempFilePath)
 import Utils.Http (downloadFile)
 import Web.Scotty (filesOpts, get, liftIO, post, queryParamMaybe, status, text)
 
+-- | Create a controller for extracting text from an image.
 controller :: (String -> IO (Result String)) -> Controller
 controller extract prefix = do
   get (fromString prefix) $ do

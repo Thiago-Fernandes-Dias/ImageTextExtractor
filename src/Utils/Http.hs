@@ -7,6 +7,7 @@ import qualified Data.ByteString.Lazy as L
 import Network.HTTP.Simple
 import System.IO (IOMode (WriteMode), withBinaryFile)
 
+-- | Download a file from a URL and save it to a file.
 downloadFile :: String -> FilePath -> IO (Either SomeException ())
 downloadFile url filePath = do
   request <- parseRequest url

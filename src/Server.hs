@@ -13,10 +13,12 @@ import Services.Rembg (removeBackground)
 import Services.Tesseract (extractText)
 import Web.Scotty (ScottyM, file, get, middleware, scotty)
 
+-- | Serve the index page.
 index :: ScottyM ()
 index = do
   get "/" $ file "static/index.html"
 
+-- | Serve the application.
 server :: ReaderT Config IO ()
 server = ReaderT $ \config -> do
   scotty (_port config) $ do
