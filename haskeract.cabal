@@ -65,12 +65,15 @@ executable haskeract
                         Controllers,
                         Controllers.Text,
                         Controllers.Remove,
+                        Controllers.Edit,
                         Server,
                         Services,
                         Services.Tesseract,
                         Services.Rembg,
+                        Services.Edit,
                         Utils.Files,
-                        Utils.Http
+                        Utils.Http,
+                        Utils.Helpers
 
 
     -- LANGUAGE extensions used by modules in this package.

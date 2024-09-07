@@ -6,10 +6,12 @@ module Server (server) where
 import Config (Config, _env, _port)
 import Control.Monad.Reader (ReaderT (..))
 import qualified Controllers.Remove as Remove
+import qualified Controllers.Edit as Edit
 import qualified Controllers.Text as Text
 import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
 import Services.Rembg (removeBackground)
+import Services.Edit (editImage)
 import Services.Tesseract (extractText)
 import Web.Scotty (ScottyM, file, get, middleware, scotty)
 
@@ -26,3 +28,4 @@ server = ReaderT $ \config -> do
     index
     Text.controller extractText "/text"
     Remove.controller removeBackground "/remove"
+    Edit.controller editImage "/edit"
