@@ -15,11 +15,3 @@ instance Applicative Result where
 instance Monad Result where
   Ok a >>= f = f a
   Error e >>= _ = Error e
-
-data EditParams = EditParams
-  { blur :: Maybe Double,
-    newDimensions :: Maybe (Int, Int),
-    laplacian :: Bool
-  }
-
-defaultEditParams = EditParams Nothing Nothing False

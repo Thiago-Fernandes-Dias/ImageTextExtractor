@@ -6,14 +6,13 @@ module Controllers.Edit (controller) where
 import Controllers (Controller, image, serverError)
 import Data.String (IsString (fromString))
 import qualified Data.Text.Lazy as TL
-import Data.Text.Read (decimal)
 import Network.HTTP.Types (badRequest400)
 import Network.Wai.Parse (defaultParseRequestBodyOptions, fileContent)
-import Services (EditParams (..), Result (..), defaultEditParams)
-import Text.Read (readMaybe)
+import Services (Result (..))
+import Services.Edit (EditParams (..), defaultEditParams)
 import Utils.Files (generateTempFilePath)
 import Utils.Helpers (readDoubleParam, readIntPairParam)
-import Web.Scotty (Param (..), filesOpts, get, liftIO, param, post, queryParamMaybe, status, text)
+import Web.Scotty (Param, filesOpts, liftIO, post, status, text)
 
 controller :: (String -> String -> EditParams -> IO (Result ())) -> Controller
 controller scale prefix = do

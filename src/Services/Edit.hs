@@ -1,12 +1,20 @@
-module Services.Edit (editImage) where
+module Services.Edit (editImage, EditParams (..), defaultEditParams) where
 
 import Graphics.Image (Image, RGBA, VS, X, Y, convert)
 import Graphics.Image.IO (Readable (..), readImage, writeImage)
 import Graphics.Image.Processing (Bilinear (..), Border (..), resize)
 import Graphics.Image.Processing.Filter (applyFilter, gaussianBlur, gaussianSmoothingFilter, laplacianFilter)
-import Services (EditParams (..), Result (..))
+import Services (Result (..))
 
 type Img = Image VS Y Double
+
+data EditParams = EditParams
+  { blur :: Maybe Double,
+    newDimensions :: Maybe (Int, Int),
+    laplacian :: Bool
+  }
+
+defaultEditParams = EditParams Nothing Nothing False
 
 editImage :: String -> String -> EditParams -> IO (Result ())
 editImage input output params = do
