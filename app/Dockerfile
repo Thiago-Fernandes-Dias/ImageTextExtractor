@@ -4,20 +4,24 @@ FROM ubuntu:latest
 ARG appHome=/app
 ARG port=3000
 ARG pythonVersion=3.11
-ARG ghcVersion=9.4.7-3
-ARG cabalVersion=3.8.1.0-1
+ARG ghcVersion=9.2.8
+ARG cabalVersion=3.8.1.0
 
 # Add repositories for the runtimes
 RUN apt update -y && apt install -y --no-install-recommends software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
-RUN add-apt-repository universe
 
 # Install system dependencies
 RUN apt update -y && apt install -y --no-install-recommends \
     curl \
     tesseract-ocr \
+    build-essential \
     ca-certificates \
     libffi-dev \
+    libffi8 \
+    libgmp-dev \
+    libgmp10 \
+    libncurses-dev \
     libtinfo-dev \
     libncursesw5-dev \
     libssl-dev \
@@ -31,14 +35,21 @@ RUN apt update -y && apt install -y --no-install-recommends \
     libnss3-dev \
     openssl \
     libreadline-dev \
-    ghc=${ghcVersion} \
-    cabal-install=${cabalVersion} \
     python${pythonVersion} \
     python3-pip
 
+# Install GHCup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 sh
+ENV PATH=/root/.ghcup/bin:$PATH
+
+# Install GHC and Cabal
+RUN mkdir -p /root/.ghcup/ghc
+RUN ghcup install ghc --set --force ${ghcVersion} 
+RUN ghcup install cabal --set --force ${cabalVersion} 
+
 # Download models for background removal
-RUN mkdir -p /home/.u2net
-RUN curl -o /home/.u2net/u2net.onnx https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx
+RUN mkdir -p /root/.u2net
+RUN curl -o /root/.u2net/u2net.onnx https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx
 
 # Clean up
 RUN apt autoclean && apt autoremove && rm -rf /var/lib/apt/lists/*
