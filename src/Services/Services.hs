@@ -15,3 +15,13 @@ instance Applicative Result where
 instance Monad Result where
   Ok a >>= f = f a
   Error e >>= _ = Error e
+
+data EditParams = EditParams
+  { blur :: Maybe Double,
+    height :: Maybe Int,
+    width :: Maybe Int,
+    laplacian :: Bool
+  }
+
+defaultEditParams :: EditParams
+defaultEditParams = EditParams Nothing Nothing Nothing False
