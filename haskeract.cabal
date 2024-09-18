@@ -65,19 +65,22 @@ executable haskeract
                         Controllers,
                         Controllers.Text,
                         Controllers.Remove,
+                        Controllers.Edit,
                         Server,
                         Services,
                         Services.Tesseract,
                         Services.Rembg,
+                        Services.Edit,
                         Utils.Files,
-                        Utils.Http
+                        Utils.Http,
+                        Utils.Helpers
 
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:     base >= 4.6 && < 5,
+    build-depends:     base >= 4.8 && < 4.17,
                        process,
                        bytestring,
                        filepath,
@@ -90,7 +93,8 @@ executable haskeract
                        http-conduit,
                        temporary,
                        wai-middleware-static,
-                       mtl
+                       mtl,
+                       hip
 
     -- Directories containing source files.
     hs-source-dirs:     src,

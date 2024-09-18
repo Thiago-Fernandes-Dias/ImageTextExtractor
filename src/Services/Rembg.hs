@@ -5,7 +5,7 @@ import System.Exit (ExitCode (..))
 import System.Process (readProcessWithExitCode)
 import Web.Scotty (liftIO)
 
--- | Extract text from an image file.
+-- | Remove the background from an image.
 removeBackground :: String -> String -> IO (Result ())
 removeBackground input output = do
   (exitCode, stdout, stderr) <- liftIO $ readProcessWithExitCode "rembg" ["i", input, output] ""
