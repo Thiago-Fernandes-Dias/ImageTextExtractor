@@ -1,59 +1,159 @@
 # Haskeract
 
-Serviço para extração do texto em imagens feito em Haskell.
+Service for image processing built in Haskell.
 
-## Dependências
+## Dependencies
 
-Para que o projeto seja executado localmente (em um ambiente Linux), certifique-se de que as dependências
+To run the project locally (in a Linux environment), make sure the following dependencies are installed:
 
-- zlib1g-dev
+- curl
+- tesseract-ocr
 - build-essential
+- ca-certificates
 - libffi-dev
+- libffi8
 - libgmp-dev
 - libgmp10
 - libncurses-dev
-- tesseract-ocr
-- ghc `v9.4.8`
-- cabal `v3.10.3.0`
+- libtinfo-dev
+- libncursesw5-dev
+- libssl-dev
+- libsqlite3-dev
+- tk-dev
+- libgdbm-dev
+- libc6-dev
+- libbz2-dev
+- zlib1g-dev
+- libncurses5-dev
+- libnss3-dev
+- openssl
+- libreadline-dev
+- python3.11
+- python3-pip
 
-estejam instaladas no sistema.
+## Installing and running locally
 
-## Instalando e executando localmente
+To run **Haskeract** locally:
 
-Para rodar o **Haskeract** localmente,
-
-- Atualize o repositório de dependências, para que os pacotes do repositório [Hackage](https://hackage.haskell.org/) possam ser instalados, através do seguinte comando:
+- Update the dependency repository so that packages from the [Hackage](https://hackage.haskell.org/) repository can be installed, using the command:
 
 ```bash
 cabal update
 ```
 
-- Execute o projeto com o comando
+- Install the dependencies for the features that use Python with the command
+
+```bash
+pip install -r requirements.txt
+```
+
+> It is recommended to create a virtual environment to isolate the project from the system.
+
+- Finally, use the following command to start the server:
 
 ```bash
 cabal run
 ```
 
-## Relatório
+> The project can also be run in a [Docker](https://docs.docker.com/get-started/) container. To do this, simply build an image from the Dockerfile and create a container from it.
 
-### Dificuldades
+## Endpoints
 
-Nossa principal dificuldade em desenvolver este projeto foi encontrar uma biblioteca que permitisse a criação de um servidor web para upload e processamento de arquivos. Inicialmente nós tentamos utilizar o [Integrated Haskell Platform (IHP)](https://ihp.digitallyinduced.com/), que é um Framework para criar aplicações web com a arquitetura MVC (Model View Controller). Entretanto, diferente do Scotty, ele não oferece a possibilidade de acessar o conteúdo do arquivo submetido ou o seu caminho no sistema de arquivos.
+### GET /text
 
-O Scotty, ao receber uma requisição HTTPS com o método POST e conteúdo do tipo "application/x-www-form-urlencoded", coloca os arquivos contidos nela temporariamente na past "/tmp" do servidor, para que ele possam ser processados. A partir disso nós precisamos pesquisar sobre funções que permitissem a execução de comandos parametrizados no servidor e que retornassem informações sobre os processos, como a saída do comando e se houve sucesso ou falha em sua execução.
+Extract text from an image via a URL.
 
-### Destaques
+**Request**:
 
-- O projeto faz intenso uso de Monads para realização de operações sensíveis, como a leitura de arquivos e resultados de  processos;
-- Tratamento de erros quando nenhum arquivo é enviado ou caso ocorra algum problema na execução do programa tesseract.
+- Method: `GET`
+- URL: `/text`
+- **Query Parameters**:
+  - `url` (required, string): URL of an image available for download;
 
-### Surpresas
+**Response**:
 
-Nós só conseguimos utilizar a biblioteca Scotty com o Cabal ao invés do Stack. No Stackage a versão disponível do Scotty é muito antiga, e não contém algumas funções que foram necessárias para o projeto. No Hackage a versão disponível é a mais rescente.
+- Content: `text/plain`
+- **Status Codes**:
+  - `200 OK`: The image was downloaded and text was successfully extracted.
+  - `400 BAD REQUEST`: No valid URL was provided.
+  - `500 INTERNAL SERVER ERROR`: An error occurred during image download or text extraction.
 
-## Dados da entrega
+### POST /text
 
-- Integrantes:
-    - Thiago Fernandes Dias, RA 11202130847;
-    - William Fernanes Dias, RA 11202020043.
-- URL do vídeo: [https://youtu.be/XQOH9VlHU9k](https://youtu.be/XQOH9VlHU9k)
+Extract text from an uploaded image.
+
+**Request**:
+
+- Method: `POST`
+- URL: `/text`
+- **Form Data**:
+  - `image` (required, bytes): Image from which the text will be extracted.
+
+**Response**:
+
+- Content: `text/plain`
+- **Status Codes**:
+  - `200 OK`: The text was successfully extracted.
+  - `400 BAD REQUEST`: No image was provided.
+  - `500 INTERNAL SERVER ERROR`: An error occurred during text extraction.
+
+### GET /remove
+
+Remove the background from an image via a URL.
+
+**Request**:
+
+- Method: `GET`
+- URL: `/remove`
+- **Query Parameters**:
+  - `url` (required, string): URL of an image available for download.
+
+**Response**:
+
+- Content: `image/png`
+- **Status Codes**:
+  - `200 OK`: The image was downloaded and the background was successfully removed.
+  - `400 BAD REQUEST`: No valid URL was provided.
+  - `500 INTERNAL SERVER ERROR`: An error occurred during image download or background removal.
+
+### POST /remove
+
+Remove the background from an uploaded image.
+
+**Request**:
+
+- Method: `POST`
+- URL: `/remove`
+- **Form Data**:
+  - `image` (required, bytes): Image from which the background will be removed.
+
+**Response**:
+
+- Content: `image/png`
+- **Status Codes**:
+  - `200 OK`: The background was successfully removed.
+  - `400 BAD REQUEST`: No image was provided.
+  - `500 INTERNAL SERVER ERROR`: An error occurred during background removal.
+
+### POST /edit
+
+Edit an image by applying filters or changing its dimensions.
+
+**Request**:
+
+- Method: `POST`
+- URL: `/edit`
+- **Form Data**:
+  - `image` (required, bytes): Image to be edited.
+  - `blur` (optional, number): Positive integer for blur intensity.
+  - `height` (optional, number): Desired height in pixels.
+  - `width` (optional, number): Desired width in pixels.
+  - `laplacian` (optional, boolean): Edge detection.
+
+**Response**:
+
+- Content: `image/png`
+- **Status Codes**:
+  - `200 OK`: Filters were successfully applied.
+  - `400 BAD REQUEST`: No image was provided.
+  - `500 INTERNAL SERVER ERROR`: An error occurred during image processing.
