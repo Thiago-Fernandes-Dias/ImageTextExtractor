@@ -7,10 +7,10 @@ import Data.String (IsString (fromString))
 import qualified Data.Text.Lazy as TL
 import Network.HTTP.Types (badRequest400)
 import Network.Wai.Parse (defaultParseRequestBodyOptions, fileContent)
-import Services (Result (..))
-import Services.Edit (EditParams (..), defaultEditParams)
+import Services (Result (..), defaultEditParams)
+import Services.Edit (EditParams (..))
 import Utils.Files (generateTempFilePath)
-import Utils.Helpers (readDoubleParam, readIntPairParam)
+import Utils.Helpers (readDoubleParam, readBoolParam, readIntParam)
 import Web.Scotty (Param, filesOpts, liftIO, post, status, text)
 
 controller :: (String -> String -> EditParams -> IO (Result ())) -> Controller

@@ -1,10 +1,12 @@
-module Services.Edit (editImage, EditParams (..), defaultEditParams) where
+{-# LANGUAGE FlexibleContexts #-}
+
+module Services.Edit (editImage, EditParams (..)) where
 
 import Graphics.Image (Image, RGBA, VS (VS), X, Y, dims, readImageY, Array)
 import Graphics.Image.IO (readImage, writeImage)
 import Graphics.Image.Processing (Bilinear (..), Border (..), resize)
 import Graphics.Image.Processing.Filter (applyFilter, gaussianBlur, laplacianFilter)
-import Services (EditParams (..), Result (..))
+import Services (EditParams (..), Result (..), defaultEditParams)
 
 editImage :: String -> String -> EditParams -> IO (Result ())
 editImage input output params =
